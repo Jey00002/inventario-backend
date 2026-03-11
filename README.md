@@ -1,6 +1,5 @@
 # Inventario Backend
-
-API REST para gestión de inventario desarrollada con Java, Spring Boot y MySQL. Incluye autenticación con JWT, validaciones y paginación.
+API REST para gestión de inventario desarrollada con Java, Spring Boot y PostgreSQL. Incluye autenticación con JWT, validaciones y paginación.
 
 ---
 
@@ -12,7 +11,7 @@ API REST para gestión de inventario desarrollada con Java, Spring Boot y MySQL.
 | Framework | Spring Boot 3.4.3 |
 | Seguridad | Spring Security + JWT |
 | Persistencia | Spring Data JPA / Hibernate |
-| Base de datos | MySQL |
+| Base de datos | PostgreSQL |
 | Build | Maven |
 
 ---
@@ -28,7 +27,6 @@ API REST para gestión de inventario desarrollada con Java, Spring Boot y MySQL.
 ---
 
 ## Estructura del proyecto
-
 ```
 bl.inventarios
 ├── controlador      # Controllers REST
@@ -43,15 +41,18 @@ bl.inventarios
 ## Configuración
 
 ### Requisitos previos
+
 - Java 21
-- MySQL 8+
+- PostgreSQL 15+
 - Maven
 
 ### application.properties
 ```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/inventarios
+spring.datasource.url=jdbc:postgresql://localhost:5432/inventarios
 spring.datasource.username=TU_USUARIO
 spring.datasource.password=TU_CONTRASEÑA
+spring.datasource.driver-class-name=org.postgresql.Driver
+spring.jpa.database-platform=org.hibernate.dialect.PostgreSQLDialect
 spring.jpa.hibernate.ddl-auto=update
 server.port=8082
 ```
