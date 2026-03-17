@@ -1,6 +1,6 @@
 package bl.inventarios.seguridad;
 
-import bl.inventarios.servicio.UsuarioServicio;
+import bl.inventarios.servicio.UserService;
 import jakarta.servlet.*;
 import jakarta.servlet.http.*;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -14,11 +14,11 @@ import java.io.IOException;
 public class JwtFilter extends OncePerRequestFilter {
 
     private final JwtUtil jwtUtil;
-    private final UsuarioServicio usuarioServicio;
+    private final UserService userService;
 
-    public JwtFilter(JwtUtil jwtUtil, UsuarioServicio usuarioServicio) {
+    public JwtFilter(JwtUtil jwtUtil, UserService userService) {
         this.jwtUtil = jwtUtil;
-        this.usuarioServicio = usuarioServicio;
+        this.userService = userService;
     }
 
     @Override
@@ -27,20 +27,18 @@ public class JwtFilter extends OncePerRequestFilter {
                                     FilterChain chain)
             throws ServletException, IOException {
 
-        // Busca el header: Authorization: Bearer <token>
         String header = request.getHeader("Authorization");
 
         if (header != null && header.startsWith("Bearer ")) {
-            String token = header.substring(7); // Quita "Bearer "
-            String username = jwtUtil.extraerUsername(token);
+            String token = header.substring(7);
+            String username = jwtUtil.extractUsername(token);
 
             if (username != null &&
                     SecurityContextHolder.getContext().getAuthentication() == null) {
 
-                UserDetails user = usuarioServicio.loadUserByUsername(username);
+                UserDetails user = userService.loadUserByUsername(username);
 
-                if (jwtUtil.validarToken(token, user.getUsername())) {
-                    // Le dice a Spring: este usuario está autenticado
+                if (jwtUtil.validateToken(token, user.getUsername())) {
                     var auth = new UsernamePasswordAuthenticationToken(
                             user, null, user.getAuthorities()
                     );
@@ -48,7 +46,6 @@ public class JwtFilter extends OncePerRequestFilter {
                 }
             }
         }
-        // Deja pasar el request al siguiente filtro o controlador
         chain.doFilter(request, response);
     }
 }

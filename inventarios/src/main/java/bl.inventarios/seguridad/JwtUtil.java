@@ -13,20 +13,18 @@ public class JwtUtil {
             "mi-clave-secreta-inventario-2024-xyz".getBytes()
     );
 
-    private final long EXPIRACION = 1000 * 60 * 60 * 10; // 10 horas
+    private final long EXPIRATION = 1000 * 60 * 60 * 10; // 10 hours
 
-    // Genera el token con el username dentro
-    public String generarToken(String username) {
+    public String generateToken(String username) {
         return Jwts.builder()
                 .subject(username)
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis() + EXPIRACION))
+                .expiration(new Date(System.currentTimeMillis() + EXPIRATION))
                 .signWith(key)
                 .compact();
     }
 
-    // Extrae el username del token
-    public String extraerUsername(String token) {
+    public String extractUsername(String token) {
         return Jwts.parser()
                 .verifyWith((javax.crypto.SecretKey) key)
                 .build()
@@ -35,13 +33,12 @@ public class JwtUtil {
                 .getSubject();
     }
 
-    // Verifica que el token sea válido
-    public boolean validarToken(String token, String username) {
-        return extraerUsername(token).equals(username)
-                && !estaExpirado(token);
+    public boolean validateToken(String token, String username) {
+        return extractUsername(token).equals(username)
+                && !isExpired(token);
     }
 
-    private boolean estaExpirado(String token) {
+    private boolean isExpired(String token) {
         return Jwts.parser()
                 .verifyWith((javax.crypto.SecretKey) key)
                 .build()

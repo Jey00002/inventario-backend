@@ -7,33 +7,30 @@ import org.springframework.security.core.userdetails.*;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-
-
 @Service
-public class UsuarioServicio implements IUserService {
+public class UserService implements IUserService {
 
-    private final UserRepository usuarioRepository;
+    private final UserRepository userRepository;
 
-    // Ya no va en el constructor
     @Lazy
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public UsuarioServicio(UserRepository usuarioRepository,
-                           @Lazy BCryptPasswordEncoder passwordEncoder) {
-        this.usuarioRepository = usuarioRepository;
+    public UserService(UserRepository userRepository,
+                       @Lazy BCryptPasswordEncoder passwordEncoder) {
+        this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
-        return usuarioRepository.findByUsername(username)
+        return userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(
-                        "Usuario no encontrado: " + username));
+                        "User not found: " + username));
     }
 
-    public User registrar(User usuario) {
-        usuario.setPassword(passwordEncoder.encode(usuario.getPassword()));
-        return usuarioRepository.save(usuario);
+    public User register(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        return userRepository.save(user);
     }
 }

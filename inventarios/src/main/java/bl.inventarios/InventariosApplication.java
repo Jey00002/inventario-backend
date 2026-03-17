@@ -1,6 +1,5 @@
 package bl.inventarios;
 
-import bl.inventarios.modelo.Producto;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 

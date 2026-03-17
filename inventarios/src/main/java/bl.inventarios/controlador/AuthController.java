@@ -8,6 +8,8 @@ import org.springframework.security.authentication.*;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/auth")
 public class AuthController {
@@ -26,20 +28,29 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody User user) {
+        // Si no manda rol, por defecto es USER
+        if (user.getRole() == null) {
+            user.setRole(User.Role.USER);
+        }
         userService.register(user);
         return ResponseEntity.ok("User registered successfully");
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody User user) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody User user) {
         authManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         user.getUsername(),
                         user.getPassword()
                 )
         );
-        UserDetails userDetails = userService.loadUserByUsername(user.getUsername());
-        String token = jwtUtil.generateToken(userDetails.getUsername());
-        return ResponseEntity.ok(token);
+        User loggedUser = (User) userService.loadUserByUsername(user.getUsername());
+        String token = jwtUtil.generateToken(loggedUser.getUsername());
+
+        // Devuelve token Y rol
+        return ResponseEntity.ok(Map.of(
+                "token", token,
+                "role", loggedUser.getRole().name()
+        ));
     }
 }

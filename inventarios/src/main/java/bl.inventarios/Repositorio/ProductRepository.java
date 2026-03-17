@@ -1,8 +1,9 @@
 package bl.inventarios.Repositorio;
 
-import bl.inventarios.modelo.Producto;
+import bl.inventarios.modelo.Product;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface ProductoRepository extends JpaRepository<Producto, String> {
+public interface ProductRepository extends JpaRepository<Product, String> {
 
 }

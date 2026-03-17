@@ -1,7 +1,7 @@
 package bl.inventarios.servicio;
 
-import bl.inventarios.Repositorio.ProductoRepository;
-import bl.inventarios.modelo.Producto;
+import bl.inventarios.Repositorio.ProductRepository;
+import bl.inventarios.modelo.Product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -9,33 +9,33 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class ProductoServicio implements IProductoServicio {
+public class ProductService implements IProductService {
 
     @Autowired
-    private ProductoRepository productoRepository;
+    private ProductRepository productRepository;
 
     @Override
-    public List<Producto> listarProductos() {
-        return this.productoRepository.findAll();
+    public List<Product> listProducts() {
+        return this.productRepository.findAll();
     }
 
     @Override
-    public Page<Producto> listarProductosPaginados(Pageable pageable) {
-        return this.productoRepository.findAll(pageable);
+    public Page<Product> listProductsPaginated(Pageable pageable) {
+        return this.productRepository.findAll(pageable);
     }
 
     @Override
-    public Producto buscarProductoPorID(String idproducto) {
-        return this.productoRepository.findById(idproducto).orElse(null);
+    public Product findProductById(String id) {
+        return this.productRepository.findById(id).orElse(null);
     }
 
     @Override
-    public Producto guardarProducto(Producto producto) {
-        return productoRepository.save(producto);
+    public Product saveProduct(Product product) {
+        return productRepository.save(product);
     }
 
     @Override
-    public void borrarProducto(String idproducto) {
-        this.productoRepository.deleteById(idproducto);
+    public void deleteProduct(String id) {
+        this.productRepository.deleteById(id);
     }
 }
