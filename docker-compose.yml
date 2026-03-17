@@ -1,0 +1,27 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: inventarios-db
+    environment:
+      POSTGRES_DB: inventarios
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: 75387414
+    ports:
+      - "5433:5432"  # antes era 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  backend:
+    build: .
+    container_name: inventarios-backend
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/inventarios
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: 75387414
+    depends_on:
+      - postgres
+
+volumes:
+  postgres_data:
