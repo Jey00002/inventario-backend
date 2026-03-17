@@ -136,7 +136,7 @@ Validación — si falta un campo obligatorio:
 ## Frontend relacionado
  
 Este backend está conectado a un frontend desarrollado en **React** (puerto 3000).  
-Repositorio: [inventario-app](https://github.com/Jey00002/inventario-app)
+Repositorio: [inventario-app](https://github.com/Jey00002/inventario-frontend.git)
  
 ---
  
